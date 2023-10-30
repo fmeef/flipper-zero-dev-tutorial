@@ -19,6 +19,7 @@ Person* sharedPerson;
 
 // The drawing callback for the Person* view
 static void person_draw_callback(Canvas* canvas, void* context) {
+    UNUSED(context);
     canvas_clear(canvas);
     canvas_set_font(canvas, FontSecondary);
     canvas_draw_str(canvas, 14, 27, "Name - ");
@@ -47,6 +48,23 @@ static void person_draw_callback(Canvas* canvas, void* context) {
 
     canvas_set_font(canvas, FontSecondary);
     canvas_draw_str(canvas, 45, 61, "Hold back to return");
+}
+
+void process_person_for_the_view(Person* person, InputEvent* event) {
+    with_view_model(
+        person->view,
+        PersonalizedViewModel * model,
+        {
+            if(event->type == InputTypePress) {
+                if(event->key == InputKeyOk) {
+                    model->ok_pressed = true;
+                }
+                if(event->key == InputKeyBack) {
+                    model->back_pressed = true;
+                }
+            }
+        },
+        true);
 }
 
 // Manage the input events on this callback from the Person* view
@@ -85,25 +103,8 @@ void view_person_free(Person* person) {
     free(person);
 }
 
-// Rreturn the View* of this personalized view 
+// Rreturn the View* of this personalized view
 View* view_person_get_view(Person* person) {
     furi_assert(person);
     return person->view;
-}
-
-void process_person_for_the_view(Person* person, InputEvent* event) {
-    with_view_model(
-        person->view,
-        PersonalizedViewModel * model,
-        {
-            if(event->type == InputTypePress) {
-                if(event->key == InputKeyOk) {
-                    model->ok_pressed = true;
-                }
-                if(event->key == InputKeyBack) {
-                    model->back_pressed = true;
-                }
-            }
-        },
-        true);
 }

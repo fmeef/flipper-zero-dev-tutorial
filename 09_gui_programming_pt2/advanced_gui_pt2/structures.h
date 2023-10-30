@@ -41,6 +41,8 @@ typedef struct {
     // have inserted before.
     TextBox* text_box;
 
+    FuriMutex* mutex;
+
     // The container for the personalized buttons
     Widget* widget;
     char input[TEXT_BUFFER_SIZE];

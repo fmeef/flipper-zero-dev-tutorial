@@ -19,6 +19,7 @@
 int menu_stage = 0;
 
 static void draw_callback(Canvas* canvas, void* context) {
+    UNUSED(context);
     if(menu_stage == 0) {
         draw_splash_screen(canvas);
     }
@@ -82,6 +83,7 @@ int32_t main_fap(void* p) {
             break;
         }
     }
+    UNUSED(request_exit);
 
     // Freeing up memory from all the unused resources.
     furi_message_queue_free(event_queue);

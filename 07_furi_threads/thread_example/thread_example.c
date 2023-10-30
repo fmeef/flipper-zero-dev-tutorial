@@ -40,6 +40,7 @@ TimeTableThread* timeTableThread5;
 bool stop;
 
 static void draw_callback(Canvas* canvas, void* context) {
+    UNUSED(context);
     // Convert here from integer to string, the value of the time-table
     // generated and updated from the timeTableThread(n)
     char label_time_table_2[BUFFER_SIZE];

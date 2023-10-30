@@ -17,10 +17,11 @@
 
 Car* sharedCar;
 
-// The function of this CarView is to to have two differents views 
+// The function of this CarView is to to have two differents views
 // that work all together.
 
 static void car_draw_callback(Canvas* canvas, void* context) {
+    UNUSED(context);
     canvas_clear(canvas);
     canvas_set_font(canvas, FontSecondary);
     canvas_draw_str(canvas, 14, 27, "Type - ");
@@ -47,6 +48,23 @@ static void car_draw_callback(Canvas* canvas, void* context) {
 
     canvas_set_font(canvas, FontSecondary);
     canvas_draw_str(canvas, 45, 61, "Hold back to return");
+}
+
+void process_car_for_the_view(Car* car, InputEvent* event) {
+    with_view_model(
+        car->view,
+        PersonalizedViewModel * model,
+        {
+            if(event->type == InputTypePress) {
+                if(event->key == InputKeyOk) {
+                    model->ok_pressed = true;
+                }
+                if(event->key == InputKeyBack) {
+                    model->back_pressed = true;
+                }
+            }
+        },
+        true);
 }
 
 static bool car_input_callback(InputEvent* event, void* context) {
@@ -85,21 +103,4 @@ void view_car_free(Car* car) {
 View* view_car_get_view(Car* car) {
     furi_assert(car);
     return car->view;
-}
-
-void process_car_for_the_view(Car* car, InputEvent* event) {
-    with_view_model(
-        car->view,
-        PersonalizedViewModel * model,
-        {
-            if(event->type == InputTypePress) {
-                if(event->key == InputKeyOk) {
-                    model->ok_pressed = true;
-                }
-                if(event->key == InputKeyBack) {
-                    model->back_pressed = true;
-                }
-            }
-        },
-        true);
 }

@@ -103,6 +103,8 @@ static void read_file() {
     Storage* storage = furi_record_open(RECORD_STORAGE);
     File* file = storage_file_alloc(storage);
 
+    UNUSED(filepath);
+
     // here I used FSOM_OPEN_EXISTING (Open file, fail if file doesn't exist)
     bool result =
         storage_file_open(file, EXT_PATH("apps/Examples/test.log"), FSAM_READ, FSOM_OPEN_EXISTING);
