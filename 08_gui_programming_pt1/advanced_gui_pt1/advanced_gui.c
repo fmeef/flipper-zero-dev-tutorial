@@ -58,6 +58,9 @@ void advanced_gui_app_free(AdvancedGUI* app) {
     submenu_free(app->submenu);
     view_dispatcher_free(app->view_dispatcher);
 
+    view_person_free(app->personGui);
+    view_car_free(app->carGui);
+
     // Close gui record
     furi_record_close(RECORD_GUI);
     app->gui = NULL;
@@ -81,10 +84,6 @@ AdvancedGUI* advanced_gui_app_alloc() {
     submenu_add_item(app->submenu, "Item 1 - Person", SubmenuIndexPerson, submenu_callback, app);
     submenu_add_item(
         app->submenu, "Item 2 - only 4 demo", SubmenuIndexPerson, submenu_callback, app);
-    submenu_add_item(
-        app->submenu, "Item 3 - only 4 demo", SubmenuIndexPerson, submenu_callback, app);
-    submenu_add_item(
-        app->submenu, "Item 4 - only 4 demo", SubmenuIndexPerson, submenu_callback, app);
     submenu_add_item(app->submenu, "Item 5 - car", SubmenuIndexCar, submenu_callback, app);
 
     view_set_previous_callback(submenu_get_view(app->submenu), application_exit);
