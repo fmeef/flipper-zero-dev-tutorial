@@ -15,11 +15,10 @@
 #include <furi_hal.h>
 #include <gui/elements.h>
 
-Person* sharedPerson;
-
 // The drawing callback for the Person* view
 static void person_draw_callback(Canvas* canvas, void* context) {
-    UNUSED(context);
+    furi_assert(context);
+    PersonalizedViewModel* person = context;
     canvas_clear(canvas);
     canvas_set_font(canvas, FontSecondary);
     canvas_draw_str(canvas, 14, 27, "Name - ");
@@ -36,13 +35,13 @@ static void person_draw_callback(Canvas* canvas, void* context) {
     canvas_draw_line(canvas, 0, 13, 127, 13);
 
     canvas_set_font(canvas, FontSecondary);
-    canvas_draw_str(canvas, 49, 27, sharedPerson->name);
+    canvas_draw_str(canvas, 49, 27, person->name);
 
     canvas_set_font(canvas, FontSecondary);
-    canvas_draw_str(canvas, 49, 37, sharedPerson->surname);
+    canvas_draw_str(canvas, 49, 37, person->surname);
 
     char string_age[5];
-    itoa(sharedPerson->age, string_age, 10);
+    itoa(person->age, string_age, 10);
     canvas_set_font(canvas, FontSecondary);
     canvas_draw_str(canvas, 49, 47, string_age);
 
@@ -83,14 +82,18 @@ Person* view_person_alloc() {
     Person* person = malloc(sizeof(Person));
     person->view = view_alloc();
 
-    strncpy(person->name, "Jhon", BUFFER_SIZE);
-    strncpy(person->surname, "Connor", BUFFER_SIZE);
-    person->age = 25;
-
-    sharedPerson = person;
-
     view_set_context(person->view, person);
-    view_allocate_model(person->view, ViewModelTypeLocking, sizeof(Person));
+    view_allocate_model(person->view, ViewModelTypeLocking, sizeof(PersonalizedViewModel));
+    with_view_model(
+        person->view,
+        PersonalizedViewModel * pm,
+        {
+            strncpy(pm->name, "Jhon", BUFFER_SIZE);
+            strncpy(pm->surname, "Connor", BUFFER_SIZE);
+            pm->age = 25;
+        },
+        true);
+
     view_set_draw_callback(person->view, person_draw_callback);
     view_set_input_callback(person->view, person_input_callback);
     return person;

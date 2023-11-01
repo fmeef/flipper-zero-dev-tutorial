@@ -49,13 +49,13 @@ typedef enum {
 typedef struct {
     bool ok_pressed;
     bool back_pressed;
+    char name[BUFFER_SIZE];
+    char surname[BUFFER_SIZE];
+    int age;
 } PersonalizedViewModel;
 
 // A simple struct with a View*, showing name, surname and age of a Person
 typedef struct {
-    char name[BUFFER_SIZE];
-    char surname[BUFFER_SIZE];
-    int age;
     View* view;
 } Person;
 
